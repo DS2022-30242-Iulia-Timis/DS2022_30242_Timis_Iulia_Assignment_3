@@ -11,7 +11,16 @@ services:
     image: postgres
 
     healthcheck:
-      test: ["CMD", "pg_isready", "-q", "-d", "postgres", "-U", "root"]
+      test:
+        [
+          "CMD",
+          "pg_isready",
+          "-q",
+          "-d",
+          "postgres",
+          "-U",
+          "root"
+        ]
       timeout: 45s
       interval: 10s
       retries: 5

@@ -5,8 +5,10 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
 
-public class Worker {
+import java.time.LocalDateTime;
 
+public class Worker {
+    //handle delivered messages
     private static final String TASK_QUEUE_NAME = "task_queue";
 
     public static void main(int noThreads) throws Exception {
@@ -23,6 +25,9 @@ public class Worker {
         channel.queueDeclare(TASK_QUEUE_NAME, true, false, false, null);
         System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
 
+        //not to give more than one message to a worker at a time
+        //dispatch it to the next worker that is not still busy
+
         channel.basicQos(1);
 
         DeliverCallback deliverCallback = (consumerTag, delivery) -> {
@@ -37,8 +42,10 @@ public class Worker {
             }
         };
         channel.basicConsume(TASK_QUEUE_NAME, false, deliverCallback, consumerTag -> { });
+        //acknowledgment from the worker, once we're done with a task-->false
     }
 
+    //Our fake task to simulate execution time
     private static void doWork(String task) {
         for (char ch : task.toCharArray()) {
             if (ch == '.') {

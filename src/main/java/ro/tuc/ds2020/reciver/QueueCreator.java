@@ -30,7 +30,7 @@ class MultithreadingDemo extends  Thread{
 public class QueueCreator {
     public static void callMainRecivers()
     {
-        int n = 8; // Number of threads
+        int n = 2; // Number of threads
         for (int i = 0; i < n; i++) {
             MultithreadingDemo object
                     = new MultithreadingDemo();
